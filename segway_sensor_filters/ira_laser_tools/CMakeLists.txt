@@ -6,7 +6,13 @@ project(ira_laser_tools)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS laser_geometry roscpp sensor_msgs std_msgs tf dynamic_reconfigure pcl_ros)
 
-find_package(Eigen3 REQUIRED)
+message(status "ROS_DISTRO is " $ENV{ROS_DISTRO})
+
+IF("$ENV{ROS_DISTRO}" STREQUAL "indigo")
+	find_package(Eigen3 REQUIRED)
+ELSE()
+	find_package(Eigen REQUIRED)
+ENDIF()
 
 find_package(PCL REQUIRED)
 
@@ -67,9 +73,23 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+IF("$ENV{ROS_DISTRO}" STREQUAL "indigo")
+	include_directories(include
+  	${catkin_INCLUDE_DIRS}
+  	${EIGEN_INCLUDE_DIRS}
+  	${PCL_INCLUDE_DIRS}
+	)
+ELSE()
+	include_directories(include
+  	${catkin_INCLUDE_DIRS}
+  	${Eigen_INCLUDE_DIRS}
+  	${PCL_INCLUDE_DIRS}
+	)
+ENDIF()
+
 include_directories(include
   ${catkin_INCLUDE_DIRS}
-  ${EIGEN_INCLUDE_DIRS}
+  ${Eigen_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
 )
 
